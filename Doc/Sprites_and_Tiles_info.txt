@@ -1,0 +1,27 @@
+Формат тайлов (спрайтов)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+16 x 16, 32 x 32, 48 x 48, 64 x 64, 128 x 128
+rgb = 8 x 8 x 8 => @24
+
+Item_None_16@24.png
+Item_None_32@24.png
+Item_None_48@24.png
+Item_None_64@24.png
+Item_None_128@24.png
+
+...
+
+Item_Player_up_16@24.png
+Item_Player_left_16@24.png
+Item_Player_right_16@24.png
+Item_Player_down_16@24.png
+
+Item_Player_up_32@24.png
+...
+Item_Player_up_48@24.png
+...
+Item_Player_up_64@24.png
+...
+Item_Player_up_128@24.png
+,,

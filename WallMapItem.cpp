@@ -1,0 +1,6 @@
+#include "WallMapItem.h"
+
+//WallMapItem :
+//{
+
+//}

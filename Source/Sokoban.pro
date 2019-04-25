@@ -25,28 +25,28 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
-        main.cpp \
-        MainWindow.cpp \
-    Map.cpp \
-    WallMapItem.cpp \
-    MapWidget.cpp \
-    MapLoader.cpp \
-    NulledMapItem.cpp
+    main.cpp \
+    MainWindow.cpp \
+    Map\Map.cpp \
+    Map\MapWidget.cpp \
+    Map\MapLoader.cpp \
+    MapItems\WallMapItem.cpp \
+    MapItems\NulledMapItem.cpp
 
 HEADERS += \
-        MainWindow.h \
-    Map.h \
-    MapItemType.h \
-    WallMapItem.h \
-    MapItemBase.h \
-    MapLoader.h \
-    MapSaver.h \
-    MapWidget.h \
     Error.h \
-    NulledMapItem.h
+    MainWindow.h \
+    Map\Map.h \
+    Map\MapLoader.h \
+    Map\MapSaver.h \
+    Map\MapWidget.h \
+    MapItems\MapItemType.h \
+    MapItems\WallMapItem.h \
+    MapItems\MapItemBase.h \
+    MapItems\NulledMapItem.h
 
 FORMS += \
-        MainWindow.ui
+	MainWindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

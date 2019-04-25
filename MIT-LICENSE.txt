@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2019 bulmaxvad
+Copyright (c) 2019 bulmaxvad: Vlad P. Vasilenko, Max A. Fedosenko, Vadim 
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

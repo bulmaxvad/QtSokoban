@@ -1,6 +1,6 @@
 #include "Map.h"
 
-#include "MapItemBase.h"
+#include "MapItems/MapItemBase.h"
 #include <QDebug>
 
 namespace Sokoban {

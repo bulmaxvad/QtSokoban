@@ -5,7 +5,7 @@
 #include <QVector>
 
 #include "MapLoader.h"
-#include "MapItemBase.h"
+#include "MapItems/MapItemBase.h"
 
 namespace Sokoban {
 ;

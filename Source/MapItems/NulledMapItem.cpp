@@ -4,27 +4,32 @@ namespace Sokoban {
 ;
 
 NulledMapItem::NulledMapItem()
-{
-
-}
+{}
 
 NulledMapItem::~NulledMapItem()
-{
-}
+{}
 
 MapItemType NulledMapItem::itemType() const
 {
     return MapItemType::Unknown;
 }
 
-const QPoint NulledMapItem::position() const
+void NulledMapItem::move(int dx, int dy)
+{}
+
+void NulledMapItem::show()
 {
-    return MapItemBase::invalidPoint();
+    throw std::exception("Not implemented");
 }
 
-void NulledMapItem::draw(Sokoban::QPainter * const painter) const
+void NulledMapItem::hide()
 {
-    Q_UNUSED(painter);
+    throw std::exception("Not implemented");
+}
+
+bool NulledMapItem::isVisible()
+{
+    return false;
 }
 
 } // end of namespace Sokoban

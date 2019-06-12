@@ -2,6 +2,8 @@
 #ifndef MAPITEMTYPE_H
 #define MAPITEMTYPE_H
 
+#include <QHash>
+
 namespace Sokoban {
 ;
 
@@ -39,11 +41,20 @@ enum class MapItemType
     // Игрок.
     //
     Player,
+    Player_up = Player,
+    Player_right,
+    Player_down,
+    Player_left,
 };
 
-inline bool operator!(Sokoban::MapItemType mit)
+inline uint qHash(const MapItemType& mit, uint seed)
 {
-    return mit == Sokoban::MapItemType::Unknown;
+    return ::qHash(static_cast<int>(mit), seed);
+}
+
+inline bool operator!(MapItemType mit)
+{
+    return mit == MapItemType::Unknown;
 }
 
 

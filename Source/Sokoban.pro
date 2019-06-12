@@ -25,25 +25,47 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
-    main.cpp \
+    Game.cpp \
     MainWindow.cpp \
-    Map\Map.cpp \
+    Map/Map.cpp \
+    Map/MapList.cpp \
+    Map/MapManager.cpp \
+    Map/TextMap.cpp \
+    MapItems/BoxMapItem.cpp \
+    MapItems/FloorMapItem.cpp \
+    MapItems/MapItemBase.cpp \
+    MapItems/NoneMapItem.cpp \
+    MapItems/PlayerMapItem.cpp \
+    MapItems/StockMapItem.cpp \
+    SpriteManager.cpp \
+    main.cpp \
     Map\MapWidget.cpp \
-    Map\MapLoader.cpp \
     MapItems\WallMapItem.cpp \
     MapItems\NulledMapItem.cpp
 
 HEADERS += \
+    Array2D.h \
     Error.h \
+    Game.h \
     MainWindow.h \
-    Map\Map.h \
-    Map\MapLoader.h \
+    Map/Map.h \
+    Map/MapList.h \
+    Map/MapManager.h \
+    Map/TextMap.h \
+    MapItems/BoxMapItem.h \
+    MapItems/FloorMapItem.h \
+    MapItems/NoneMapItem.h \
+    MapItems/NulledMapItem.h \
+    MapItems/PlayerMapItem.h \
+    MapItems/StockMapItem.h \
     Map\MapSaver.h \
     Map\MapWidget.h \
     MapItems\MapItemType.h \
     MapItems\WallMapItem.h \
     MapItems\MapItemBase.h \
-    MapItems\NulledMapItem.h
+    MapItems\NulledMapItem.h \
+    Singleton.h \
+    SpriteManager.h
 
 FORMS += \
 	MainWindow.ui

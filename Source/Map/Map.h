@@ -1,114 +1,119 @@
-#ifndef MAP_H
-#define MAP_H
+#ifndef MAPLEVEL_H
+#define MAPLEVEL_H
 
-#include <QPoint>
-#include <QSize>
+#include <QList>
 #include <QVector>
+#include <QChar>
+
+#include "MapItems/MapItemType.h"
+
+
+#include "../Array2D.h"
 
 namespace Sokoban {
 ;
 
 class MapItemBase;
+class BoxMapItem;
+class StockMapItem;
+class PlayerMapItem;
+class TextMap;
+class Game;
+class MapManager;
 
 class Map
 {
 public:
-    Map();
-    Map(int width, int height);
-    ~Map();
+    using DataLine = QVector<MapItemBase*>;
+    using Data     = Array2D<MapItemBase*>;
 
 public:
-
-/* Initializatiopn methods */
-    //
-    // Initialize size of level
-    //
-    void init(int width, int height);
-
-    //
-    // Clear the level
-    //
+    Map();
+    Map(const QSize& levelSize, int levelNumber =0);
+    Map(const Map& other);
+    explicit Map(const TextMap* textMap);
+protected:
+    void init(const QSize& levelSize, int levelNumber =0);
     void clear();
 
 public:
+    MapManager* mapManager() const;
+    void setMapManager(MapManager* newMapManager);
 
-/* Map's methods */
-    //
-    // return number of level
-    //
-    int  number() const;
+    Game* game() const;
 
-    //
-    // Check whether map is initialized
-    //
-    bool isInitialized() const;
-
-public:
-/* Item manipulation's methods */
-    //
-    // Return type of item at x y position
-    //
-    MapItemBase* itemAt(int x, int y) const;
-
-    //
-    // Return type of item at QPoint position
-    //
-    MapItemBase* itemAt(const QPoint& position) const;
-
-    //
-    // Check whether item can move at x y position
-    //
-    bool itemCanMove(int newX, int newY, MapItemBase* item) const;
-
-    //
-    // Set new item at x y position
-    //
-    void setItem(const MapItemBase* newItem, int x, int y);
-
-    //
-    // Set new item at QPoint position
-    //
-    void setItem(const MapItemBase* newItem, QPoint position);
-
-    //
-    // Remove item at x y position
-    //
-    void removeItemAt(int x, int y);
-
-    //
-    // Remove item at QPoint position
-    //
-    void removeItemAt(const QPoint& position);
-
-    //
-    // Delete item at x y position
-    //
-    void deleteItemAt(int x, int y);
-
-    //
-    // Delete item at QPoint position
-    //
-    void deleteItemAt(const QPoint& position);
-
-public:
-/* Map size manupulation's methods */
-    //
-    // Return size of the map
-    //
+    bool  isEmpty() const;
     QSize size() const;
 
-    //
-    // Set size of the map
-    //
-    QSize setSize();
+    MapItemBase* staticItem(int column, int line, bool checkBound =false) const;
+    MapItemBase* staticItem(const QPoint& position, bool checkBound =false) const;
 
+    PlayerMapItem*          player() const;
+    BoxMapItem*             boxItem(const QPoint& position) const;
+    StockMapItem*           stockItem(const QPoint& position) const;
+    QVector<BoxMapItem*>&   boxes();
+    QVector<StockMapItem*>& stocks();
+
+    void boxHasChangedPosition(BoxMapItem* boxItem, const QPoint& oldPosition);
+
+
+    int  number() const;
+    void setNumber(int newNumber);
+
+    void initMapItemsPositions();
+
+public:
+    explicit operator bool() const;
+    Map& operator = (const Map& other);
+
+public:
+    static MapItemType  charToMapItemType(const char   ch);
+    static MapItemType  charToMapItemType(const QChar& ch);
+    static MapItemBase* mapItemTypeToMapItem(MapItemType mit);
 
 protected:
-    QVector< QVector<MapItemBase*> > m_items;
-    volatile bool m_isInitializating;
-    bool m_isInitialized;
+    MapItemBase*            charToMapItem(const char ch);
+    //~PlayerMapItem*          findPlayer(QPoint* playerPos =nullptr) const;
+    PlayerMapItem*          makePlayer();
+    QVector<BoxMapItem*>&   makeBoxes();
+    QVector<StockMapItem*>& makeStocks();
+    void                    clearBoxes();
+    void                    clearStocks();
 
+    PlayerMapItem*          copyPlayer(const Map* other);
+    QVector<BoxMapItem*>&   copyBoxes(const Map* other);
+    QVector<StockMapItem*>& copyStocks(const Map* other);
+
+    void                    setStaticItem(const QPoint& itemPos, MapItemBase* mapItem);
+    void                    setStaticItem(int column, int line,  MapItemBase* mapItem);
+protected:
+    //bool setData(const Data& newData);
+    inline const Data& data() const { return m_data; }
+    inline Data&      rdata()       { return m_data; }
+
+    void assignMapItemsToThis();
+
+private:
+    friend class MapManager;
+
+protected:
+    bool                   m_isBoxesMakes  = false;
+    bool                   m_isPlayerMakes = false;
+    bool                   m_isStocksMakes = false;
+    Data                   m_data;
+    int                    m_number;
+    PlayerMapItem*         m_player = nullptr;
+    QVector<BoxMapItem*>   m_boxes;
+    QVector<StockMapItem*> m_stocks;
+    MapManager*            m_mapManager = nullptr;
 };
 
+/* FOR DELETE
+bool Map::isLineCountConst(const Map& map);
+bool Map::isLineCountConst(const Map::Data& mapData);
+*/
+
+
 } // end of namespace Sokoban
-#endif // MAP_H
+
+#endif // MAPLEVEL_H

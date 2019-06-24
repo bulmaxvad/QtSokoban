@@ -24,13 +24,18 @@ public:
     Array2D(const Array2D& other)
         : m_data(nullptr)
     {
-        this->operator=(other);
+        this->operator=(other); // EQ: *this = other;
     }
 
     virtual ~Array2D()
     {
-        clear();
+        delete [] m_data;
+
+        m_data   = nullptr;
+        m_width  = 0;
+        m_height = 0;
     }
+
 protected:
     void init(uint32_t width, uint32_t height)
     {
@@ -96,6 +101,8 @@ public:
 
         T* newData = new T[width*height];
         copyData(newData, m_data, square());
+        delete [] m_data;
+
         m_data   = newData;
         m_width  = width;
         m_height = height;

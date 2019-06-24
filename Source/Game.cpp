@@ -21,11 +21,11 @@ Game::Game(QWidget* parentWidget, const QString& gameDir /*=QString()*/)
     : m_mapWidget(new MapWidget(this, parentWidget))
 {
     m_gameDir = gameDir.isEmpty()
-        // ? QApplication::applicationDirPath()+"GameDir/";
-        ? "P:/old_projects/Sokoban/cxx/QtApp/Sokoban/Examples/GameDir/"
+        ? QApplication::applicationDirPath()+"/GameDir/"
         : gameDir;
 
     mapManager().setGame(this);
+
     m_currentMap        = mapManager().mapByOrder(0);
     m_spritesFolderName = "Sprites/";
 
@@ -42,7 +42,7 @@ QString Game::gameDir() const
 
 void Game::setGameDir(const QString& newGameDir)
 {
-    if (newGameDir == m_gameDir)
+    if (newGameDir == m_gameDir) // Это быстрее чем делать лишнее присваивание
         return;
 
     m_gameDir = newGameDir;
@@ -77,18 +77,7 @@ QPixmap& Game::itemTypePixmap(const MapItemType mapItemType)
 
 bool Game::start()
 {
-    return startFrom(1);
-}
-
-bool Game::startFrom(int levelNumber)
-{
-    if (Stopped != state())
-        return false;
-
-    //m_mapManager.
-
     m_state = Started;
-
     return true;
 }
 
@@ -99,6 +88,16 @@ bool Game::playNexLevel()
         return false;
 
     m_currentMap = map;
+    return true;
+}
+
+bool Game::isPositionIntoBoard(const QPoint& itemPos) const
+{
+    if (0 > itemPos.x() || itemPos.x() >= currentMap()->size().width())
+        return false;
+    if (0 > itemPos.y() || itemPos.y() >= currentMap()->size().height())
+        return false;
+
     return true;
 }
 
@@ -114,13 +113,15 @@ void Game::checkForEndGame()
 {
     if (!isPlayerWins())
         return;
+    if (End == state())
+        return;
 
-    QMessageBox::information(mapWidget()->parentWidget(), "Information", "<h1>Congratulations!</h1></br>You are Win!!!");
+    QMessageBox::information(mapWidget()->parentWidget(), "Information", c_winLevelMessage);
     if (!playNexLevel())
     {
-        QMessageBox::information(mapWidget()->parentWidget(), "Information", "<h1>Congratulations!</h1></br>You are Total Winner!!!");
+        m_state = End;
+        QMessageBox::information(mapWidget()->parentWidget(), "Information", c_winGameMessage);
     }
-
     updateMapWidget();
 }
 
@@ -234,23 +235,19 @@ bool Game::canPlayerMove(int dx, int dy) const
     QPoint currPlayerPos = currentMap()->player()->position();
     QPoint newPlayerPos  = currPlayerPos+offset;
 
-    if (0 > newPlayerPos.x() || newPlayerPos.x() >= currentMap()->size().width())
-        return false;
-    if (0 > newPlayerPos.y() || newPlayerPos.y() >= currentMap()->size().height())
+    if (!isPositionIntoBoard(newPlayerPos))
         return false;
 
     // Check for static map items:
     MapItemBase* miNext = currentMap()->staticItem(newPlayerPos);
     if (nullptr == miNext || miNext->unknownType() || miNext->isStatic())
-    {
         return false;
-    }
 
     //-------------------
 
     MapItemType nextItemType = miNext->itemType();
 
-    if (MapItemType::Wall == nextItemType
+        if (MapItemType::Wall == nextItemType
        || MapItemType::Unknown == nextItemType)
     {
         return false;
@@ -288,9 +285,7 @@ bool Game::canBoxMove(MapItemBase* boxMapItem, const QPoint& posOffset) const
 
     QPoint newBoxPos  = boxMapItem->position()+posOffset;
 
-    if (0 > newBoxPos.x() || newBoxPos.x() >= currentMap()->size().width())
-        return false;
-    if (0 > newBoxPos.y() || newBoxPos.y() >= currentMap()->size().height())
+    if (!isPositionIntoBoard(newBoxPos))
         return false;
 
     MapItemBase* nextMapItem = currentMap()->staticItem(newBoxPos);

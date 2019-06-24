@@ -2,8 +2,10 @@
 #define GAME_H
 
 #include <QPoint>
+#include <QMessageBox>
 
 #include "Map/MapManager.h"
+#include "Map/MapWidget.h"
 #include "SpriteManager.h"
 
 class QWidget;
@@ -29,6 +31,7 @@ public:
         Started,
         Paused,
         Stopped,
+        End,
         Serviced
     };
 
@@ -46,12 +49,12 @@ public:
 
 public:
     bool start();
-    bool startFrom(int levelNumber);
     bool pause();
     bool stop();
 
     bool playNexLevel();
 
+    bool isPositionIntoBoard(const QPoint& itemPos) const;
 
     int  currentLevelNumber() const;
 
@@ -94,6 +97,11 @@ protected:
 protected:
     //??
     void updateMapWidget() const;
+
+protected:
+    // TODO: create constants qMessage about winning.
+    const QString c_winLevelMessage = "<h1>Congratulations!</h1></br>You are Win!!!";
+    const QString c_winGameMessage = "<h1>Congratulations!</h1></br>You are Total Winner!!!";
 
 protected:
     // Game widget:
